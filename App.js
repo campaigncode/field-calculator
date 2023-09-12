@@ -3,6 +3,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import Door from './components/Doors';
 import Phone from './components/Phones';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function App() {
 	const Tab = createBottomTabNavigator();
@@ -11,8 +12,20 @@ export default function App() {
 		<GluestackUIProvider config={config.theme}>
 			<NavigationContainer>
 				<Tab.Navigator>
-					<Tab.Screen name="Doorknocking" component={Door} />
-					<Tab.Screen name="Phone Calls" component={Phone} />
+					<Tab.Screen
+						name="Doorknocking"
+						options={{
+							tabBarIcon: ({ color, size }) => <FontAwesome5 name="door-open" color={color} size={size} />
+						}}
+						component={Door}
+					/>
+					<Tab.Screen
+						name="Phone Calls"
+						options={{
+							tabBarIcon: ({ color, size }) => <FontAwesome5 name="phone" color={color} size={size} />
+						}}
+						component={Phone}
+					/>
 				</Tab.Navigator>
 			</NavigationContainer>
 		</GluestackUIProvider>

@@ -1,103 +1,35 @@
-import { Box, FormControl, FormControlLabel, FormControlLabelText, Input, InputField } from '@gluestack-ui/themed';
+import { Box } from '@gluestack-ui/themed';
 import { useEffect, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import TextBox from './TextBox';
 
 export default function Door() {
-	const [doorknockers, setDoorknockers] = useState(0);
-	const [shifts, setShifts] = useState(0);
-	const [hoursPerShift, setHoursPerShift] = useState(0);
-	const [doorsPerHour, setDoorsPerHour] = useState(0);
-	const [weeksKnocking, setWeeksKnocking] = useState(0);
+	const [doorknockers, setDoorknockers] = useState();
+	const [shifts, setShifts] = useState();
+	const [hoursPerShift, setHoursPerShift] = useState();
+	const [doorsPerHour, setDoorsPerHour] = useState();
+	const [weeksKnocking, setWeeksKnocking] = useState();
 
-	const [estimatedAttempts, setEstimatedAttempts] = useState(0);
-	const [estimatedContacts, setEstimatedContacts] = useState(0);
+	const [estimatedAttempts, setEstimatedAttempts] = useState();
+	const [estimatedContacts, setEstimatedContacts] = useState();
 
 	useEffect(() => {
 		const result = Math.floor(doorknockers * shifts * hoursPerShift * doorsPerHour * weeksKnocking * (5 / 3));
 
-		setEstimatedAttempts(`${result}`);
-		setEstimatedContacts(`${Math.floor(result * 0.15)}`);
+		setEstimatedAttempts(result);
+		setEstimatedContacts(Math.floor(result * 0.15));
 	}, [doorknockers, shifts, hoursPerShift, doorsPerHour, weeksKnocking]);
 
 	return (
 		<KeyboardAwareScrollView>
 			<Box width="100%" height="100%" alignItems="center">
-				<Box width="80%" mb="$3" mt="$6">
-					<FormControl size="md" isDisabled={false} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Doorknockers</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={doorknockers} onChangeText={setDoorknockers} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
-
-				<Box width="80%" mb="$3">
-					<FormControl size="md" isDisabled={false} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Shifts</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={shifts} onChangeText={setShifts} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
-
-				<Box width="80%" mb="$3">
-					<FormControl size="md" isDisabled={false} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Hours in a shift</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={hoursPerShift} onChangeText={setHoursPerShift} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
-
-				<Box width="80%" mb="$3">
-					<FormControl size="md" isDisabled={false} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Doors per hour</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={doorsPerHour} onChangeText={setDoorsPerHour} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
-
-				<Box width="80%" mb="$6">
-					<FormControl size="md" isDisabled={false} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Weeks spent knocking</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={weeksKnocking} onChangeText={setWeeksKnocking} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
-
-				<Box width="80%" mb="$3">
-					<FormControl size="md" isDisabled={true} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Estimated attempts</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={estimatedAttempts} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
-
-				<Box width="80%">
-					<FormControl size="md" isDisabled={true} isInvalid={false} isReadOnly={false} isRequired={false}>
-						<FormControlLabel mb="$1">
-							<FormControlLabelText>Estimated contacts</FormControlLabelText>
-						</FormControlLabel>
-						<Input>
-							<InputField value={estimatedContacts} keyboardType="numeric" type="text" />
-						</Input>
-					</FormControl>
-				</Box>
+				<TextBox label="Doorknockers" value={doorknockers} onChangeText={setDoorknockers} />
+				<TextBox label="Shifts" value={shifts} onChangeText={setShifts} />
+				<TextBox label="Hours in a shift" value={hoursPerShift} onChangeText={setHoursPerShift} />
+				<TextBox label="Calls per hour" value={doorsPerHour} onChangeText={setDoorsPerHour} />
+				<TextBox label="Weeks spent knocking" value={weeksKnocking} onChangeText={setWeeksKnocking} />
+				<TextBox label="Estimated Attempts" value={estimatedAttempts} isReadOnly={true} />
+				<TextBox label="Estimated Contacts" value={estimatedContacts} isReadOnly={true} />
 			</Box>
 		</KeyboardAwareScrollView>
 	);
