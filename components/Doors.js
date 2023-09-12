@@ -13,14 +13,67 @@ export default function Door() {
 	const [estimatedAttempts, setEstimatedAttempts] = useState();
 	const [estimatedContacts, setEstimatedContacts] = useState();
 
-	const [isSelected, setIsSelected] = useState(7);
+	const [isSelected, setIsSelected] = useState(6);
+	const [estimateGroupFocusID, setEstimateGroupFocusID] = useState(1);
+
+	const contactMultiplier = 0.15;
+
+	// Calculate doorknockers
+	useEffect(() => {
+		if (isSelected == 1) {
+			setDoorknockers(Math.ceil(estimatedAttempts / (shifts * hoursPerShift * doorsPerHour * weeksKnocking)));
+		}
+	}, [estimatedAttempts, shifts, hoursPerShift, doorsPerHour, weeksKnocking, isSelected]);
+
+	// Calculate shifts
+	useEffect(() => {
+		if (isSelected == 2) {
+			setShifts(Math.ceil(estimatedAttempts / (doorknockers * hoursPerShift * doorsPerHour * weeksKnocking)));
+		}
+	}, [estimatedAttempts, doorknockers, hoursPerShift, doorsPerHour, weeksKnocking, isSelected]);
+
+	// Calculate hoursPerShift
+	useEffect(() => {
+		if (isSelected == 3) {
+			setHoursPerShift(Math.ceil(estimatedAttempts / (doorknockers * shifts * doorsPerHour * weeksKnocking)));
+		}
+	}, [estimatedAttempts, doorknockers, shifts, doorsPerHour, weeksKnocking, isSelected]);
+
+	// Calculate doorsPerHour
+	useEffect(() => {
+		if (isSelected == 4) {
+			setDoorsPerHour(Math.ceil(estimatedAttempts / (doorknockers * shifts * hoursPerShift * weeksKnocking)));
+		}
+	}, [estimatedAttempts, doorknockers, shifts, hoursPerShift, weeksKnocking, isSelected]);
+
+	// Calculate weeksKnocking
+	useEffect(() => {
+		if (isSelected == 5) {
+			setWeeksKnocking(Math.ceil(estimatedAttempts / (doorknockers * shifts * hoursPerShift * doorsPerHour)));
+		}
+	}, [estimatedAttempts, doorknockers, shifts, hoursPerShift, doorsPerHour, isSelected]);
 
 	useEffect(() => {
-		const result = Math.floor(doorknockers * shifts * hoursPerShift * doorsPerHour * weeksKnocking * (5 / 3));
+		if (isSelected == 6) {
+			const result = Math.floor(doorknockers * shifts * hoursPerShift * doorsPerHour * weeksKnocking * (5 / 3));
 
-		setEstimatedAttempts(result);
-		setEstimatedContacts(Math.floor(result * 0.15));
-	}, [doorknockers, shifts, hoursPerShift, doorsPerHour, weeksKnocking]);
+			setEstimatedAttempts(result);
+			setEstimatedContacts(Math.floor(result * contactMultiplier));
+		}
+	}, [doorknockers, shifts, hoursPerShift, doorsPerHour, weeksKnocking, isSelected]);
+
+	// Keep estimates in sync
+	useEffect(() => {
+		if (estimateGroupFocusID == 1) {
+			setEstimatedContacts(Math.floor(estimatedAttempts * contactMultiplier));
+		}
+	}, [estimatedAttempts]);
+
+	useEffect(() => {
+		if (estimateGroupFocusID == 2) {
+			setEstimatedAttempts(Math.floor(estimatedContacts / contactMultiplier));
+		}
+	}, [estimatedContacts]);
 
 	return (
 		<KeyboardAwareScrollView>
@@ -59,8 +112,32 @@ export default function Door() {
 						value={weeksKnocking}
 						onChangeText={setWeeksKnocking}
 					/>
-					<TextBox id={6} isSelected={isSelected} setIsSelected={setIsSelected} label="Estimated Attempts" value={estimatedAttempts} />
-					<TextBox id={7} isSelected={isSelected} setIsSelected={setIsSelected} label="Estimated Contacts" value={estimatedContacts} />
+					<Box width="80%" sx={{ borderColor: '$primary500', borderWidth: 2, borderRadius: 5, padding: 15 }}>
+						<VStack space="md">
+							<TextBox
+								id={6}
+								isSelected={isSelected}
+								setIsSelected={setIsSelected}
+								label="Estimated Attempts"
+								value={estimatedAttempts}
+								onChangeText={setEstimatedAttempts}
+								fullWidth={true}
+								estimateGroupFocusID={1}
+								setEstimateGroupFocusID={setEstimateGroupFocusID}
+							/>
+							<TextBox
+								id={6}
+								isSelected={isSelected}
+								setIsSelected={setIsSelected}
+								label="Estimated Contacts"
+								value={estimatedContacts}
+								onChangeText={setEstimatedContacts}
+								fullWidth={true}
+								estimateGroupFocusID={2}
+								setEstimateGroupFocusID={setEstimateGroupFocusID}
+							/>
+						</VStack>
+					</Box>
 				</VStack>
 			</Box>
 		</KeyboardAwareScrollView>

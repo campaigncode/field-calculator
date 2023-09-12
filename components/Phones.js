@@ -13,14 +13,68 @@ export default function Phone() {
 	const [estimatedAttempts, setEstimatedAttempts] = useState();
 	const [estimatedContacts, setEstimatedContacts] = useState();
 
-	const [isSelected, setIsSelected] = useState(7);
+	const [isSelected, setIsSelected] = useState(6);
+	const [estimateGroupFocusID, setEstimateGroupFocusID] = useState(1);
+
+	const contactMultiplier = 0.08;
+
+	// Calculate phonecallers
+	useEffect(() => {
+		if (isSelected == 1) {
+			setPhonecallers(Math.ceil(estimatedAttempts / (shifts * hoursPerShift * doorsPerHour * weeksCalling)));
+		}
+	}, [estimatedAttempts, shifts, hoursPerShift, doorsPerHour, weeksCalling, isSelected]);
+
+	// Calculate shifts
+	useEffect(() => {
+		if (isSelected == 2) {
+			setShifts(Math.ceil(estimatedAttempts / (phonecallers * hoursPerShift * doorsPerHour * weeksCalling)));
+		}
+	}, [estimatedAttempts, phonecallers, hoursPerShift, doorsPerHour, weeksCalling, isSelected]);
+
+	// Calculate hoursPerShift
+	useEffect(() => {
+		if (isSelected == 3) {
+			setHoursPerShift(Math.ceil(estimatedAttempts / (phonecallers * shifts * doorsPerHour * weeksCalling)));
+		}
+	}, [estimatedAttempts, phonecallers, shifts, doorsPerHour, weeksCalling, isSelected]);
+
+	// Calculate doorsPerHour
+	useEffect(() => {
+		if (isSelected == 4) {
+			setDoorsPerHour(Math.ceil(estimatedAttempts / (phonecallers * shifts * hoursPerShift * weeksCalling)));
+		}
+	}, [estimatedAttempts, phonecallers, shifts, hoursPerShift, weeksCalling, isSelected]);
+
+	// Calculate weeksCalling
+	useEffect(() => {
+		if (isSelected == 5) {
+			setWeeksCalling(Math.ceil(estimatedAttempts / (phonecallers * shifts * hoursPerShift * doorsPerHour)));
+		}
+	}, [estimatedAttempts, phonecallers, shifts, hoursPerShift, doorsPerHour, isSelected]);
+
+	// Calculate estimates
+	useEffect(() => {
+		if (isSelected == 6) {
+			const result = Math.floor(phonecallers * shifts * hoursPerShift * doorsPerHour * weeksCalling);
+
+			setEstimatedAttempts(result);
+			setEstimatedContacts(Math.floor(result * contactMultiplier));
+		}
+	}, [phonecallers, shifts, hoursPerShift, doorsPerHour, weeksCalling, isSelected]);
+
+	// Keep estimates in sync
+	useEffect(() => {
+		if (estimateGroupFocusID == 1) {
+			setEstimatedContacts(Math.floor(estimatedAttempts * contactMultiplier));
+		}
+	}, [estimatedAttempts]);
 
 	useEffect(() => {
-		const result = Math.floor(phonecallers * shifts * hoursPerShift * doorsPerHour * weeksCalling);
-
-		setEstimatedAttempts(result);
-		setEstimatedContacts(Math.floor(result * 0.08));
-	}, [phonecallers, shifts, hoursPerShift, doorsPerHour, weeksCalling]);
+		if (estimateGroupFocusID == 2) {
+			setEstimatedAttempts(Math.floor(estimatedContacts / contactMultiplier));
+		}
+	}, [estimatedContacts]);
 
 	return (
 		<KeyboardAwareScrollView>
@@ -59,8 +113,32 @@ export default function Phone() {
 						value={weeksCalling}
 						onChangeText={setWeeksCalling}
 					/>
-					<TextBox id={6} isSelected={isSelected} setIsSelected={setIsSelected} label="Estimated Attempts" value={estimatedAttempts} />
-					<TextBox id={7} isSelected={isSelected} setIsSelected={setIsSelected} label="Estimated Contacts" value={estimatedContacts} />
+					<Box width="80%" sx={{ borderColor: '$primary500', borderWidth: 2, borderRadius: 5, padding: 15 }}>
+						<VStack space="md">
+							<TextBox
+								id={6}
+								isSelected={isSelected}
+								setIsSelected={setIsSelected}
+								label="Estimated Attempts"
+								value={estimatedAttempts}
+								onChangeText={setEstimatedAttempts}
+								fullWidth={true}
+								estimateGroupFocusID={1}
+								setEstimateGroupFocusID={setEstimateGroupFocusID}
+							/>
+							<TextBox
+								id={6}
+								isSelected={isSelected}
+								setIsSelected={setIsSelected}
+								label="Estimated Contacts"
+								value={estimatedContacts}
+								onChangeText={setEstimatedContacts}
+								fullWidth={true}
+								estimateGroupFocusID={2}
+								setEstimateGroupFocusID={setEstimateGroupFocusID}
+							/>
+						</VStack>
+					</Box>
 				</VStack>
 			</Box>
 		</KeyboardAwareScrollView>

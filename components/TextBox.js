@@ -1,9 +1,18 @@
 import { Box, Checkbox, CheckboxIndicator, CheckboxIcon, CheckIcon, Input, InputField, VStack, HStack, Text } from '@gluestack-ui/themed';
-import { useState } from 'react';
 
-export default function TextBox({ id, label, value, onChangeText = () => {}, isSelected, setIsSelected }) {
+export default function TextBox({
+	id,
+	label,
+	value,
+	onChangeText = () => {},
+	isSelected,
+	setIsSelected,
+	fullWidth = false,
+	estimateGroupFocusID = -1,
+	setEstimateGroupFocusID = () => {}
+}) {
 	return (
-		<Box width="80%">
+		<Box width={fullWidth ? '100%' : '80%'}>
 			<VStack space="sm">
 				<HStack space="sm" alignItems="center">
 					<Checkbox aria-label="checkbox" defaultIsChecked={false} isChecked={isSelected == id} size="md" onChange={() => setIsSelected(id)}>
@@ -15,7 +24,13 @@ export default function TextBox({ id, label, value, onChangeText = () => {}, isS
 				</HStack>
 
 				<Input isReadOnly={isSelected == id}>
-					<InputField value={`${!value ? '' : value}`} onChangeText={onChangeText} keyboardType="numeric" type="text" />
+					<InputField
+						onFocus={() => setEstimateGroupFocusID(estimateGroupFocusID)}
+						value={`${!value ? '' : value}`}
+						onChangeText={onChangeText}
+						keyboardType="numeric"
+						type="text"
+					/>
 				</Input>
 			</VStack>
 		</Box>
