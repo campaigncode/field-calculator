@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"main": "node_modules/expo/AppEntry.js",
 	"scripts": {
-		"preinstall": "npx only-allow pnpm",
 		"start": "expo start",
 		"start-dev": "expo start --tunnel",
 		"start-dev-clean": "expo start --clear --tunnel",
