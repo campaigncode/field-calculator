@@ -11,8 +11,8 @@
     "prebuild-android": "rm -rf ./android && expo prebuild --platform android",
     "build-ios": "eas build --platform ios --local",
     "build-android": "eas build --platform andriod --local",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web"
   },
   "dependencies": {
@@ -27,7 +27,8 @@
     "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
-    "react-native-svg": "13.9.0"
+    "react-native-svg": "13.9.0",
+    "expo-splash-screen": "~0.20.5"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
