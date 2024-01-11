@@ -2,7 +2,6 @@ import { Box, VStack } from '@gluestack-ui/themed';
 import { useEffect, useState } from 'react';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
 import TextBox from './TextBox';
-import { View } from 'react-native';
 
 export default function Door() {
 	const [doorknockers, setDoorknockers] = useState();

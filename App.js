@@ -1,5 +1,6 @@
-import { GluestackUIProvider, config } from '@gluestack-ui/themed';
+import { GluestackUIProvider } from '@gluestack-ui/themed';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { config } from '@gluestack-ui/config';
 import { NavigationContainer } from '@react-navigation/native';
 import Door from './components/Doors';
 import Phone from './components/Phones';
@@ -9,7 +10,7 @@ export default function App() {
 	const Tab = createBottomTabNavigator();
 
 	return (
-		<GluestackUIProvider config={config.theme}>
+		<GluestackUIProvider config={config}>
 			<NavigationContainer>
 				<Tab.Navigator>
 					<Tab.Screen
